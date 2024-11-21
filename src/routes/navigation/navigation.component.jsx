@@ -1,10 +1,16 @@
-import { Fragment } from "react";
-import { Outlet, Link } from "react-router-dom"
-import { ReactComponent as AllureLogo } from '../../assets/crown.svg'
+import { Fragment, useContext } from "react";
+import { Outlet, Link } from "react-router-dom";
+
+import { ReactComponent as AllureLogo } from '../../assets/crown.svg';
+import { UserContext } from "../../contexts/user.context";
+import { signOutUser } from "../../utils/firebase/firebase.utils";
 
 import './navigation.styles.scss';
 
 const Navigation = () => {
+  const { currentUser } = useContext(UserContext);//whenever a value inside of useContext changes, it tells the component to rerender it. A glorified hook into another component that will rerender its subsequent hooked components whenever the UserProvider component updates itself when useState is triggered. However when it rerenders the hooked component it will not rerender the DOM(return statement) if the value from usercontext is not used in it.
+
+  // console.log(currentUser);
   return (
     <Fragment>
       <div className="navigation">
@@ -15,9 +21,15 @@ const Navigation = () => {
           <Link className="nav-link" to="/shop">
             Shop
           </Link>
-          <Link className="nav-link" to="/auth">
-            Sign in
-          </Link>
+          {
+            currentUser ? (
+              <span className="nav-link" onClick={signOutUser}>Sign out</span>
+            ): (
+            <Link className="nav-link" to="/auth">
+              Sign in
+            </Link>
+            )
+          }
         </div>
       </div>
       {/* outlet describes where the route child will be placed-> always placed on the parent router */}
