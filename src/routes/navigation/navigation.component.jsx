@@ -9,7 +9,7 @@ import { UserContext } from "../../contexts/user.context";
 import { CartDropdownContext } from "../../contexts/cart-dropdown.context";
 import { signOutUser } from "../../utils/firebase/firebase.utils";
 
-import './navigation.styles.scss';
+import { NavigationContainer, LogoContainer, NavLinks, NavLink } from "./navigation.styles";
 
 const Navigation = () => {
   const { currentUser } = useContext(UserContext);//whenever a value inside of useContext changes, it tells the component to rerender it. A glorified hook into another component that will rerender its subsequent hooked components whenever the UserProvider component updates itself when useState is triggered. However when it rerenders the hooked component it will not rerender the DOM(return statement) if the value from usercontext is not used in it.
@@ -18,27 +18,27 @@ const Navigation = () => {
   // console.log(currentUser);
   return (
     <Fragment>
-      <div className="navigation">
-        <Link className="logo-container" to="/">
+      <NavigationContainer>
+        <LogoContainer to="/">
           <AllureLogo className="logo" />
-        </Link>
-        <div className="nav-links-container">
-          <Link className="nav-link" to="/shop">
+        </LogoContainer>
+        <NavLinks>
+          <NavLink to="/shop">
             Shop
-          </Link>
+          </NavLink>
           {
             currentUser ? (
-              <span className="nav-link" onClick={signOutUser}>Sign out</span>
+              <NavLink as='span' onClick={signOutUser}>Sign out</NavLink>
             ): (
-            <Link className="nav-link" to="/auth">
+            <NavLink to="/auth">
               Sign in
-            </Link>
+            </NavLink>
             )
           }
           <CartIcon />
-        </div>
+        </NavLinks>
         {isCartOpen && <CartDropdown />}
-      </div>
+      </NavigationContainer>
       {/* outlet describes where the route child will be placed-> always placed on the parent router */}
       <Outlet />
     </Fragment>
